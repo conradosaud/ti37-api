@@ -18,6 +18,7 @@ const mysql = require('mysql2');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
+  password: '1234',
   database: 'conradito_filmes'
 });
 
@@ -25,10 +26,30 @@ const connection = mysql.createConnection({
 
 
 // ROTAS DO EXPRESS
+
+app.post('/filmes', (req, res) => {
+
+    const titulo = req.body.titulo;
+    const sinopse = req.body.sinopse;
+
+    connection.query(
+        ` INSERT INTO filmes ( titulo, sinopse ) VALUES ( "${titulo}" , "${sinopse}"  ); `,
+        function(err, results, fields) {
+            console.log(results);
+            console.log(fields);
+
+            res.send( results );
+
+        }
+    );
+
+
+})
+
 app.get('/filmes', (req, res) => {
 
     connection.query(
-        ' SELECT * FROM filmes; ',
+        ' SELECT * FROM filmes ORDER BY id DESC ; ',
         function(err, results, fields) {
             console.log(results);
             console.log(fields);
