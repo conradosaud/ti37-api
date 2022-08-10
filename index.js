@@ -18,7 +18,7 @@ const mysql = require('mysql2');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '1234',
+  password: 'senac',
   database: 'conradito_filmes'
 });
 
@@ -27,13 +27,13 @@ const connection = mysql.createConnection({
 
 // ROTAS DO EXPRESS
 
-app.post('/filmes', (req, res) => {
 
-    const titulo = req.body.titulo;
-    const sinopse = req.body.sinopse;
+app.delete('/filmes/:id', (req, res) => {
+
+    const id = req.params.id;
 
     connection.query(
-        ` INSERT INTO filmes ( titulo, sinopse ) VALUES ( "${titulo}" , "${sinopse}"  ); `,
+        ` DELETE FROM filmes WHERE id = ${id}; `,
         function(err, results, fields) {
             console.log(results);
             console.log(fields);
@@ -43,6 +43,60 @@ app.post('/filmes', (req, res) => {
         }
     );
 
+})
+
+app.post('/filmes', (req, res) => {
+
+    const titulo = req.body.titulo;
+    const sinopse = req.body.sinopse;
+
+    connection.query(
+        ` INSERT INTO filmes ( titulo, sinopse ) VALUES ( "${titulo}" , "${sinopse}"  ); `,
+        function(err, results, fields) {
+            //console.log(results);
+            //console.log(fields);
+
+            res.send( results );
+
+        }
+    );
+
+})
+
+app.post('/usuarios', (req, res) => {
+
+    const usuario = req.body.usuario;
+    const nome = req.body.nome;
+    const senha = req.body.senha;
+
+    connection.query(
+        ` INSERT INTO usuarios ( usuario, nome, senha ) VALUES ( "${usuario}", "${nome}" , "${senha}"  ); `,
+        function(err, results, fields) {
+            //console.log(results);
+            //console.log(fields);
+
+            res.send( results );
+
+        }
+    );
+
+})
+
+app.post('/usuarios/autentica', (req, res) => {
+
+    const usuario = req.body.usuario;
+    const senha = req.body.senha;
+
+    connection.query(
+        ` SELECT id, nome FROM usuarios WHERE usuario = "${usuario}" AND senha = "${senha}" ; `,
+        function(err, results, fields) {
+            //console.log(results);
+            //console.log(fields);
+
+            res.send( results );
+
+        }
+    );
 
 })
 
@@ -51,8 +105,8 @@ app.get('/filmes', (req, res) => {
     connection.query(
         ' SELECT * FROM filmes ORDER BY id DESC ; ',
         function(err, results, fields) {
-            console.log(results);
-            console.log(fields);
+            //console.log(results);
+            //console.log(fields);
 
             res.send( results );
 
@@ -69,8 +123,8 @@ app.get('/busca_filmes/:titulo', (req, res) => {
     connection.query(
         ` SELECT * FROM filmes WHERE titulo LIKE "%${ titulo }%"; `,
         function(err, results, fields) {
-            console.log(results);
-            console.log(fields);
+            //console.log(results);
+            //console.log(fields);
 
             res.send( results );
 
