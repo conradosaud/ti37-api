@@ -1,5 +1,5 @@
 // CONEXÃO DO EXPRESS
-const express = require('express')
+const express = require('express');
 const app = express()
 const port = 3001
 
@@ -12,17 +12,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-// CONEXÃO DO BANCO MYSQL
-const mysql = require('mysql2');
-
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'senac',
-  database: 'conradito_filmes'
-});
-
-
+const connection = require("./banco/banco.js").connection;
 
 
 // ROTAS DO EXPRESS
@@ -101,36 +91,14 @@ app.post('/usuarios/autentica', (req, res) => {
 })
 
 app.get('/filmes', (req, res) => {
-
-    connection.query(
-        ' SELECT * FROM filmes ORDER BY id DESC ; ',
-        function(err, results, fields) {
-            //console.log(results);
-            //console.log(fields);
-
-            res.send( results );
-
-        }
-    );
-
+    
+    require("./controlador/filmes/get.js").BuscaTodos( req, res );
 
 })
 
 app.get('/busca_filmes/:titulo', (req, res) => {
 
-    const titulo = req.params.titulo;
-
-    connection.query(
-        ` SELECT * FROM filmes WHERE titulo LIKE "%${ titulo }%"; `,
-        function(err, results, fields) {
-            //console.log(results);
-            //console.log(fields);
-
-            res.send( results );
-
-        }
-    );
-
+    require("./controlador/filmes/get.js").BuscaPorTitulo( req, res );
 
 })
 
