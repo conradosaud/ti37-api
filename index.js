@@ -90,11 +90,13 @@ app.post('/usuarios/autentica', (req, res) => {
 
 })
 
-app.get('/filmes', (req, res) => {
-    
-    require("./controlador/filmes/get.js").BuscaTodos( req, res );
+app.use( require("./rotas/rotas.js") );
 
-})
+// app.get('/filmes', (req, res) => {
+    
+//     require("./controlador/filmes/get.js").BuscaTodos( req, res );
+
+// })
 
 app.get('/busca_filmes/:titulo', (req, res) => {
 
